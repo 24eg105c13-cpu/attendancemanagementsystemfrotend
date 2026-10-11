@@ -1,6 +1,529 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Attendance Management System</title>
-    <link rel="stylesheet" href="./style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+
+        header {
+            background: #173b70;
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header p {
+            margin-top: 8px;
+        }
+
+        nav {
+            background: #102b50;
+            padding: 15px;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 25px auto;
+            padding: 0 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px #00000010;
+        }
+
+        .card h3 {
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1763c6;
+        }
+
+        .panel {
+            background: white;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px #00000010;
+        }
+
+        .panel h2 {
+            margin-bottom: 20px;
+        }
+
+        form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        input, select {
+            flex: 1 1 180px;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+        }
+
+        button {
+            padding: 12px 18px;
+            border: none;
+            border-radius: 6px;
+            background: #1763c6;
+            color: white;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #124b96;
+        }
+
+        .present {
+            background: #15803d;
+            margin-right: 5px;
+        }
+
+        .absent {
+            background: #dc2626;
+        }
+
+        .delete {
+            background: #64748b;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 14px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #eaf2ff;
+        }
+
+        #message {
+            margin-top: 12px;
+            color: #15803d;
+        }
+
+        footer {
+            background: #102b50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            header h1 {
+                font-size: 24px;
+            }
+
+            nav a {
+                display: inline-block;
+                margin: 6px;
+            }
+        }
+    </style>
 </head>
+
+<body>
+
+    <header>
+        <h1>Attendance Management System</h1>
+        <p>Student Attendance Dashboard</p>
+    </header>
+
+    <nav>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#students">Students</a>
+        <a href="#attendance">Attendance</a>
+        <a href="#records">Records</a>
+    </nav>
+
+    <main class="container">
+
+        <section id="dashboard" class="cards">
+            <div class="card">
+                <h3>Total Students</h3>
+                <p id="totalStudents">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Present Today</h3>
+                <p id="presentCount">0</p>
+            </div>
+
+            <div class="card">
+                <h3>Absent Today</h3>
+                <p id="absentCount">0</p>
+            </div>
+        </section>
+
+        <section id="students" class="panel">
+            <h2>Register Student</h2>
+
+            <form id="studentForm">
+                <input
+                    type="text"
+                    id="studentName"
+                    placeholder="Student Name"
+                    required
+                >
+
+                <input
+                    type="text"
+                    id="rollNumber"
+                    placeholder="Roll Number"
+                    required
+                >
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                >
+
+                <button type="submit">Add Student</button>
+            </form>
+
+            <p id="message" role="status"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Student List</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="studentRows">
+                        <tr>
+                            <td colspan="4">No students registered.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="attendance" class="panel">
+            <h2>Mark Attendance</h2>
+
+            <form id="attendanceForm">
+                <select id="attendanceStudent" required>
+                    <option value="">Select Student</option>
+                </select>
+
+                <select id="attendanceStatus" required>
+                    <option value="PRESENT">Present</option>
+                    <option value="ABSENT">Absent</option>
+                </select>
+
+                <button type="submit">Submit Attendance</button>
+            </form>
+        </section>
+
+        <section id="records" class="panel">
+            <h2>Attendance Records</h2>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Roll Number</th>
+                            <th>Student Name</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="attendanceRows">
+                        <tr>
+                            <td colspan="4">No attendance records.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>Attendance Management System</p>
+        <p>Java | Spring Boot | MySQL</p>
+    </footer>
+
+    <script>
+        const API = "http://localhost:8080/api";
+
+        let students = [];
+        let records = [];
+
+        const studentForm = document.getElementById("studentForm");
+        const attendanceForm = document.getElementById("attendanceForm");
+        const message = document.getElementById("message");
+
+        async function apiRequest(url, options = {}) {
+            const response = await fetch(url, {
+                ...options,
+                headers: {
+                    "Content-Type": "application/json",
+                    ...options.headers
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error("Request failed: " + response.status);
+            }
+
+            if (response.status === 204) {
+                return null;
+            }
+
+            return response.json();
+        }
+
+        function safeText(value) {
+            return String(value ?? "").replace(/[&<>"']/g, char => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[char]);
+        }
+
+        async function loadStudents() {
+            try {
+                students = await apiRequest(API + "/students");
+                displayStudents();
+                updateDashboard();
+            } catch (error) {
+                message.textContent =
+                    "Cannot connect to backend. Start Spring Boot on port 8080.";
+            }
+        }
+
+        async function loadRecords() {
+            try {
+                records = await apiRequest(API + "/attendance");
+                displayRecords();
+                updateDashboard();
+            } catch (error) {
+                records = [];
+                displayRecords();
+            }
+        }
+
+        function displayStudents() {
+            const tbody = document.getElementById("studentRows");
+            const select = document.getElementById("attendanceStudent");
+
+            tbody.innerHTML = "";
+            select.innerHTML = '<option value="">Select Student</option>';
+
+            if (students.length === 0) {
+                tbody.innerHTML =
+                    '<tr><td colspan="4">No students registered.</td></tr>';
+            }
+
+            students.forEach(student => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${safeText(student.rollNumber)}</td>
+                    <td>${safeText(student.name)}</td>
+                    <td>${safeText(student.email || "-")}</td>
+                    <td>
+                        <button class="delete" type="button"
+                            data-id="${student.id}">Delete</button>
+                    </td>
+                `;
+
+                row.querySelector("button").addEventListener("click", () => {
+                    deleteStudent(student.id);
+                });
+
+                tbody.appendChild(row);
+
+                const option = document.createElement("option");
+                option.value = student.id;
+                option.textContent =
+                    student.rollNumber + " - " + student.name;
+
+                select.appendChild(option);
+            });
+
+            document.getElementById("totalStudents").textContent =
+                students.length;
+        }
+
+        function displayRecords() {
+            const tbody = document.getElementById("attendanceRows");
+
+            tbody.innerHTML = "";
+
+            if (records.length === 0) {
+                tbody.innerHTML =
+                    '<tr><td colspan="4">No attendance records.</td></tr>';
+            }
+
+            records.slice().reverse().forEach(record => {
+                const row = document.createElement("tr");
+
+                row.innerHTML = `
+                    <td>${safeText(record.rollNumber)}</td>
+                    <td>${safeText(record.studentName)}</td>
+                    <td>${safeText(record.date)}</td>
+                    <td>${safeText(record.status)}</td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        function updateDashboard() {
+            const today = new Date().toLocaleDateString("en-CA");
+
+            const todayRecords = records.filter(record =>
+                record.date === today
+            );
+
+            document.getElementById("presentCount").textContent =
+                todayRecords.filter(record =>
+                    record.status === "PRESENT"
+                ).length;
+
+            document.getElementById("absentCount").textContent =
+                todayRecords.filter(record =>
+                    record.status === "ABSENT"
+                ).length;
+        }
+
+        studentForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const student = {
+                name: document.getElementById("studentName").value.trim(),
+                rollNumber: document.getElementById("rollNumber").value.trim(),
+                email: document.getElementById("email").value.trim()
+            };
+
+            try {
+                await apiRequest(API + "/students", {
+                    method: "POST",
+                    body: JSON.stringify(student)
+                });
+
+                studentForm.reset();
+                message.textContent = "Student added successfully.";
+
+                await loadStudents();
+            } catch (error) {
+                message.textContent =
+                    "Could not add student. Check backend and roll number.";
+            }
+        });
+
+        attendanceForm.addEventListener("submit", async event => {
+            event.preventDefault();
+
+            const studentId =
+                document.getElementById("attendanceStudent").value;
+
+            const status =
+                document.getElementById("attendanceStatus").value;
+
+            try {
+                await apiRequest(API + "/attendance", {
+                    method: "POST",
+                    body: JSON.stringify({
+                        studentId: Number(studentId),
+                        status: status
+                    })
+                });
+
+                message.textContent = "Attendance saved successfully.";
+
+                await loadRecords();
+            } catch (error) {
+                message.textContent =
+                    "Could not save attendance. Check backend connection.";
+            }
+        });
+
+        async function deleteStudent(id) {
+            if (!confirm("Do you want to delete this student?")) {
+                return;
+            }
+
+            try {
+                await apiRequest(API + "/students/" + id, {
+                    method: "DELETE"
+                });
+
+                message.textContent = "Student deleted successfully.";
+
+                await loadStudents();
+                await loadRecords();
+            } catch (error) {
+                message.textContent = "Could not delete student.";
+            }
+        }
+
+        loadStudents();
+        loadRecords();
+    </script>
+
+</body>
+</html>
+```
