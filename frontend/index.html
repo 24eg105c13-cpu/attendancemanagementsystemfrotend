@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendance Management System</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Attendance Management System</h1>
+    <p>Manage students and record daily attendance</p>
+  </header>
+  <main>
+    <section class="panel">
+      <h2>Add Student</h2>
+      <form id="studentForm">
+        <input id="name" type="text" placeholder="Student name" required>
+        <input id="rollNumber" type="text" placeholder="Roll number" required>
+        <input id="email" type="email" placeholder="Email (optional)">
+        <button type="submit">Add Student</button>
+      </form>
+      <p id="message" role="status"></p>
+    </section>
+    <section class="panel">
+      <div class="section-heading">
+        <h2>Students</h2>
+        <button id="refreshButton" class="secondary" type="button">Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Roll No.</th><th>Name</th><th>Email</th><th>Attendance</th><th>Action</th></tr></thead>
+          <tbody id="studentRows"><tr><td colspan="5">Loading students...</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+    <section class="panel">
+      <h2>Attendance Records</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Student</th><th>Roll No.</th><th>Date</th><th>Status</th></tr></thead>
+          <tbody id="attendanceRows"><tr><td colspan="4">No records loaded yet.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer>Attendance Management System · Java + Spring Boot + MySQL</footer>
+  <script src="script.js"></script>
+</body>
+</html>
