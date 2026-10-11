@@ -1,0 +1,77 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>Attendance Management System</h1>
+        <p>Manage Student Attendance Easily</p>
+    </header>
+
+    <main>
+        <section class="panel">
+            <h2>Add Student</h2>
+
+            <form id="studentForm">
+                <input type="text" id="name" placeholder="Student Name" required>
+                <input type="text" id="rollNumber" placeholder="Roll Number" required>
+                <input type="email" id="email" placeholder="Email">
+                <button type="submit">Add Student</button>
+            </form>
+
+            <p id="message"></p>
+        </section>
+
+        <section class="panel">
+            <h2>Student List</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Attendance</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="studentRows">
+                    <tr>
+                        <td colspan="5">Loading students...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section class="panel">
+            <h2>Attendance Records</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Roll Number</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="attendanceRows"></tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>Attendance Management System | Java, Spring Boot and MySQL</p>
+    </footer>
+
+    <script src="script.js"></script>
+
+</body>
+</html>
+```
